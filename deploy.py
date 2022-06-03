@@ -3,6 +3,7 @@ from bokeh.models import CustomJS
 from bokeh.models.widgets import Button
 from streamlit_bokeh_events import streamlit_bokeh_events
 
+import numpy as np
 from gtts import gTTS
 
 from PIL import Image
@@ -22,13 +23,15 @@ def file_upload_on_change():
 
 
 st.set_page_config(
-    page_title='See For All',
-    page_icon='📷',
+    page_title='리트리버',
+    page_icon='🐕',
     layout='wide',
 )
 
-st.title('See For All')
+st.title('🐕 리트리버')
 
+st.text('')
+st.text('눈이 불편하신 분들을 도와주는 안내견 🐕 리트리버 입니다!')
 
 st.text('')
 st.text('')
@@ -42,7 +45,10 @@ if ping == 200:
 
     bcol1, _, bcol3 = st.columns([10, 1, 10])
     if uploaded_file is not None:
-        bcol1.image(Image.open(uploaded_file))
+        img = Image.open(uploaded_file)
+        img_np = np.array(img)
+        img_np = np.fliplr(np.swapaxes(img_np, 0, 1))
+        bcol1.image(img_np)
 
         # IC POST + process
         ic_res = requests.post(
